@@ -34,6 +34,18 @@
  NeoBundle 'tpope/vim-surround'
  NeoBundle 'scrooloose/syntastic'
  NeoBundle 'altercation/vim-colors-solarized'
+ NeoBundle 'bling/vim-airline'
+ NeoBundle 'tpope/vim-repeat'
+ NeoBundle 'tpope/vim-rails'
+ NeoBundle 'pangloss/vim-javascript'
+ NeoBundle 'majutsushi/tagbar'
+ NeoBundle 'mileszs/ack.vim'
+ NeoBundle 'airblade/vim-gitgutter'
+ NeoBundle 'tpope/vim-endwise'
+ NeoBundle 'matchit.zip'
+ NeoBundle 'rking/ag.vim'
+ NeoBundle 'digitaltoad/vim-jade'
+ NeoBundle 'tpope/vim-sensible'
 
  call neobundle#end()
 
@@ -48,11 +60,7 @@
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
-set history=700
-
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
+set history=1000
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -61,9 +69,6 @@ set autoread
 " like <leader>w saves the current file
 let mapleader = ","
 let g:mapleader = ","
-
-" Fast saving
-nmap <leader>w :w!<cr>
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
@@ -81,25 +86,32 @@ set langmenu=en
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-" Turn on the WiLd menu
+" ================ Completion =======================
+set wildmode=list:longest
+set wildmenu "enable ctrl-n and ctrl-p to scroll thru matches
+set wildignore=*.o,*.obj,*.pyc,*~ "stuff to ignore when tab completing
+set wildignore+=*vim/backups*
+set wildignore+=*sass-cache*
+set wildignore+=*DS_Store*
+set wildignore+=vendor/rails/**
+set wildignore+=vendor/cache/**
+set wildignore+=*.gem
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=*.png,*.jpg,*.gif
 set wildmenu
-
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
-if has("win16") || has("win32")
-	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
-else
-	set wildignore+=.git\*,.hg\*,.svn\*
-endif
 
 "Always show current position
 set ruler
 
 " Height of the command bar
-set cmdheight=2
+set cmdheight=1
+
+" show line numbers
+set number
 
 " A buffer becomes hidden when it is abandoned
-set hid
+set hidden
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -149,13 +161,14 @@ set foldcolumn=1
 " Enable syntax highlighting
 syntax enable
 try
-	colorscheme desert
+	colorscheme solarized
 catch
 endtry
 
 set background=dark
 " Set extra options when running in GUI mode
 if has("gui_running")
+    set guifont=Inconsolata:h22
 	set guioptions-=T
 	set guioptions-=e
 	set t_Co=256
@@ -176,6 +189,14 @@ set nobackup
 set nowb
 set noswapfile
 
+" Keep undo history across sessions, by storing in file.
+" Only works all the time.
+if has('persistent_undo')
+    silent !mkdir ~/.vim/backups > /dev/null 2>&1
+    set undodir=~/.vim/backups
+    set undofile
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -185,17 +206,20 @@ set expandtab
 " Be smart when using tabs ;)
 set smarttab
 
-" 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+" 1 tab == 2 spaces
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 
 " Linebreak on 500 characters
-set lbr
-set tw=500
+set linebreak
+set textwidth=500
 
-set ai "Auto indent
-set si "Smart indent
+set autoindent
+set smartindent
 set wrap "Wrap lines
+
+set list listchars=tab:\ \ ,trail:·
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -222,3 +246,6 @@ set viminfo^=%
 """"""""""""""""""""""""""""""
 " Always show the status line
 set laststatus=2
+
+" ================ Custom Settings ========================
+source ~/.vim/settings.vim
