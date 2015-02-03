@@ -5,6 +5,8 @@ call plug#begin('~/.vim/bundle')
 Plug 'tpope/vim-sensible'
 Plug 'shougo/vimproc', {'do': 'make'}
 Plug 'Shougo/unite.vim'
+Plug 'Shougo/unite-outline'
+Plug 'Shougo/neomru.vim'
 if has('lua') && (version >= 704 || version == 703 && has('patch885'))
 	Plug 'Shougo/neocomplete.vim'
 	let g:completionEngine = 'neocomplete'
@@ -62,21 +64,6 @@ if exists("&backupdir")
 endif
 if exists("&directory")
     set directory=~/.vim/swaps//
-endif
-
-if executable('ag')
-	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-	set grepformat=%f:%l:%C:%m
-	let g:unite_source_grep_command='ag'
-	let g:unite_source_grep_default_opts='--nocolor --nogroup --hidden'
-	let g:unite_source_grep_recursive_opt=''
-	let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
-elseif executable('ack')
-	set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-	set grepformat=%f:%l:%c:%m
-	let g:unite_source_grep_command='ack'
-	let g:unite_source_grep_default_opts='--no-heading --no-color'
-	let g:unite_source_grep_recursive_opt=''
 endif
 
 let mapleader = ","
@@ -249,3 +236,40 @@ xnoremap > >gv
 map W <Plug>CamelCaseMotion_w
 map B <Plug>CamelCaseMotion_b
 map E <Plug>CamelCaseMotion_e
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Unite
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" use fuzzy matcher in unite
+call unite#custom#source('file,file/new,buffer,file_rec', 'matchers', 'matcher_fuzzy')
+
+if executable('ag')
+	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+	set grepformat=%f:%l:%C:%m
+	let g:unite_source_grep_command='ag'
+	let g:unite_source_grep_default_opts='--nocolor --nogroup --hidden'
+	let g:unite_source_grep_recursive_opt=''
+	let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
+elseif executable('ack')
+	set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+	set grepformat=%f:%l:%c:%m
+	let g:unite_source_grep_command='ack'
+	let g:unite_source_grep_default_opts='--no-heading --no-color'
+	let g:unite_source_grep_recursive_opt=''
+endif
+
+let g:unite_source_history_yank_enable = 1
+
+function! s:unite_settings()
+  nmap <buffer> Q <plug>(unite_exit)
+  nmap <buffer> <esc> <plug>(unite_exit)
+  imap <buffer> <esc> <plug>(unite_exit)
+endfunction
+autocmd FileType unite call s:unite_settings()
+
+nnoremap <Leader>t :Unite -start-insert -auto-resize -buffer-name=files file_rec/async<CR>
+nnoremap <Leader>b :Unite -auto-resize -buffer-name=buffers buffer<CR>
+nnoremap <Leader>T :Unite -start-insert -auto-resize -buffer-name=outline outline<CR>
+nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<cr>
+nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<cr>
+nnoremap <Leader>r :Unite -buffer-name=recent file_mru<cr>
