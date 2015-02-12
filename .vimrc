@@ -16,12 +16,21 @@ else
 endif
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/vimfiler', {'on': 'VimFiler'}
+Plug 'Shougo/vimfiler'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-rbenv'
 Plug 'scrooloose/syntastic'
 Plug 'tomtom/tcomment_vim'
 Plug 'vim-scripts/camelcasemotion'
@@ -33,6 +42,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
+Plug 'rizzatti/dash.vim'
 call plug#end()
 
 set background=dark
@@ -69,9 +79,8 @@ endif
 let mapleader = ","
 let g:mapleader = ","
 
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
-command! W w !sudo tee % > /dev/null
+" allow buffer switching without saving
+set hidden
 
 set number
 "if exists('+rnu') | set relativenumber | endif
@@ -116,6 +125,67 @@ set tw=500
 set ai "Auto indent
 set si "Smart indent
 set nowrap "Wrap lines
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" key mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" make Y behave like C and D
+nnoremap Y y$
+
+" Make 0 go to the first character rather than the beginning
+" of the line. When we're programming, we're almost always
+" interested in working with text rather than empty space. If
+" you want the traditional beginning of line, use ^
+nnoremap 0 ^
+nnoremap ^ 0
+
+" center after going to next word
+nnoremap n nzz
+nnoremap N Nzz
+
+" maintain selection after indenting
+xnoremap < <gv
+xnoremap > >gv
+
+" upper case camel case motion
+map W <Plug>CamelCaseMotion_w
+map B <Plug>CamelCaseMotion_b
+map E <Plug>CamelCaseMotion_e
+sunmap W
+sunmap B
+sunmap E
+
+" :W sudo saves the file
+" (useful for handling the permission-denied error)
+command! W w !sudo tee % > /dev/null
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" whitespace killer
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
+" Strip trailing whitespace
+function! <SID>StripTrailingWhitespaces()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+
+command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
+nmap ,w :StripTrailingWhitespaces<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VimFiler
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:let g:vimfiler_as_default_explorer = 1
+
+nnoremap <D-N> :VimFilerExplorer<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " light line
@@ -218,30 +288,44 @@ endfunction
 "}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" key mappings
+" NeoComplete
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_camel_case = 1
+let g:neocomplete#enable_smart_case = 1
 
-" make Y behave like C and D
-nnoremap Y y$
+" Default # of completions is 100, that's crazy.
+let g:neocomplete#max_list = 5
 
-" center after going to next word
-nnoremap n nzz
-nnoremap N Nzz
+" Set minimum syntax keyword length.
+let g:neocomplete#auto_completion_start_length = 3
 
-" maintain selection after indenting
-xnoremap < <gv
-xnoremap > >gv
+" Map standard Ctrl-N completion to Cmd-Space
+inoremap <C-Space> <C-n>
 
-" upper case camel case motion
-map W <Plug>CamelCaseMotion_w
-map B <Plug>CamelCaseMotion_b
-map E <Plug>CamelCaseMotion_e
+" This makes sure we use neocomplete completefunc instead of
+" the one in rails.vim, otherwise this plugin will crap out.
+let g:neocomplete#force_overwrite_completefunc = 1
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+  let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " use fuzzy matcher in unite
-call unite#custom#source('file,file/new,buffer,file_rec', 'matchers', 'matcher_fuzzy')
+call unite#custom#source('file,file/new,buffer,file_rec/async', 'matchers', 'matcher_fuzzy')
 
 if executable('ag')
 	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
@@ -270,6 +354,6 @@ autocmd FileType unite call s:unite_settings()
 nnoremap <Leader>t :Unite -start-insert -auto-resize -buffer-name=files file_rec/async<CR>
 nnoremap <Leader>b :Unite -auto-resize -buffer-name=buffers buffer<CR>
 nnoremap <Leader>T :Unite -start-insert -auto-resize -buffer-name=outline outline<CR>
-nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<cr>
-nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<cr>
-nnoremap <Leader>r :Unite -buffer-name=recent file_mru<cr>
+nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<CR>
+nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<CR>
+nnoremap <Leader>r :Unite -start-insert -buffer-name=recent file_mru<CR>
