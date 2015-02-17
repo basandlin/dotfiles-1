@@ -26,15 +26,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-projectionist'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-rake'
-Plug 'tpope/vim-rbenv'
 Plug 'scrooloose/syntastic'
 Plug 'tomtom/tcomment_vim'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'itchyny/lightline.vim'
+Plug 'vim-scripts/ShowMarks'
 Plug 'vim-scripts/IndexedSearch'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
@@ -181,6 +177,12 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 nmap ,w :StripTrailingWhitespaces<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ShowMarks
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tell showmarks to not include the various brace marks (),{}, etc
+let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VimFiler
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :let g:vimfiler_as_default_explorer = 1
@@ -320,6 +322,27 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NeoSnippet
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
