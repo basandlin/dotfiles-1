@@ -363,6 +363,7 @@ call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
       \ '\.git/',
       \ '\.bundler/',
       \ '\.cache/',
+      \ '\.vendor/',
       \ ], '\|'))
 
 if executable('ag')
@@ -394,3 +395,6 @@ nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<CR>
 nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<CR>
 nnoremap <Leader>h :Unite -auto-resize -buffer-name=commands history/command<CR>
 nnoremap <Leader>r :Unite -start-insert -buffer-name=recent file_mru<CR>
+
+"grep the current word using K (mnemonic Kurrent)
+nnoremap K :execute "Unite -no-quit -buffer-name=search grep:.::" . expand('<cword>')<CR>
