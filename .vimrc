@@ -349,6 +349,9 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:unite_split_rule = "botright"
+let g:unite_source_history_yank_enable = 1
+
 " use fuzzy matcher in unite
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
@@ -356,24 +359,24 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
       \ 'ignore_pattern', join([
       \ '\.git/',
+      \ '\.bundler/',
+      \ '\.cache/',
       \ ], '\|'))
 
 if executable('ag')
-	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-	set grepformat=%f:%l:%C:%m
-	let g:unite_source_grep_command='ag'
-	let g:unite_source_grep_default_opts='--nocolor --nogroup --hidden'
-	let g:unite_source_grep_recursive_opt=''
-	let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
+  set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+  set grepformat=%f:%l:%C:%m
+  let g:unite_source_grep_command='ag'
+  let g:unite_source_grep_default_opts='--nocolor --nogroup --hidden'
+  let g:unite_source_grep_recursive_opt=''
+  let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
 elseif executable('ack')
-	set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-	set grepformat=%f:%l:%c:%m
-	let g:unite_source_grep_command='ack'
-	let g:unite_source_grep_default_opts='--no-heading --no-color'
-	let g:unite_source_grep_recursive_opt=''
+  set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+  set grepformat=%f:%l:%c:%m
+  let g:unite_source_grep_command='ack'
+  let g:unite_source_grep_default_opts='--no-heading --no-color'
+  let g:unite_source_grep_recursive_opt=''
 endif
-
-let g:unite_source_history_yank_enable = 1
 
 function! s:unite_settings()
   nmap <buffer> Q <plug>(unite_exit)
@@ -382,7 +385,7 @@ function! s:unite_settings()
 endfunction
 autocmd FileType unite call s:unite_settings()
 
-nnoremap <Leader>t :Unite -start-insert -auto-resize -buffer-name=files file_rec/async<CR>
+nnoremap <Leader>t :Unite -start-insert -auto-resize -buffer-name=files buffer file_rec/async<CR>
 nnoremap <Leader>b :Unite -auto-resize -buffer-name=buffers buffer<CR>
 nnoremap <Leader>T :Unite -start-insert -auto-resize -buffer-name=outline outline<CR>
 nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<CR>
