@@ -6,6 +6,7 @@ Plug 'tpope/vim-sensible'
 Plug 'shougo/vimproc', {'do': 'make'}
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
+Plug 'thinca/vim-unite-history'
 Plug 'Shougo/neomru.vim'
 if has('lua') && (version >= 704 || version == 703 && has('patch885'))
 	Plug 'Shougo/neocomplete.vim'
@@ -16,7 +17,6 @@ else
 endif
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/vimfiler'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'tpope/vim-unimpaired'
@@ -27,11 +27,15 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
 Plug 'scrooloose/syntastic'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tomtom/tcomment_vim'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'itchyny/lightline.vim'
+Plug 'airblade/vim-gitgutter'
 Plug 'vim-scripts/ShowMarks'
 Plug 'vim-scripts/IndexedSearch'
+Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
 Plug 'Raimondi/delimitMate'
@@ -41,12 +45,10 @@ Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
 call plug#end()
 
-set background=dark
 colorscheme solarized
-
-let g:lightline = {
-      \ 'colorscheme': 'solarized',
-      \ }
+set background=dark
+" fix vim-gitgutter display with solarized
+highlight clear SignColumn
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -183,11 +185,16 @@ nmap ,w :StripTrailingWhitespaces<CR>
 let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" VimFiler
+" NERDTree (and tabs)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-:let g:vimfiler_as_default_explorer = 1
-
-nnoremap <D-N> :VimFilerExplorer<CR>
+let NERDTreeMinimalUI=1
+let NERDTreeDirArrows = 1
+let g:NERDTreeWinSize = 30
+" Auto open nerd tree on startup
+let g:nerdtree_tabs_open_on_gui_startup = 0
+" Focus in the main content window
+let g:nerdtree_tabs_focus_on_files = 1
+nnoremap <D-N> :NERDTreeTabsToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " light line
@@ -199,16 +206,15 @@ let g:lightline = {
       \ 'active': {
       \   'left': [
       \     ['mode', 'paste'],
-      \     ['filename']
+      \     ['fugitive', 'readonly', 'filename', 'modified']
       \   ],
       \   'right': [
       \     ['lineinfo', 'syntastic'],
       \     ['percent'],
-      \     ['charcode', 'fileformat', 'fileencoding', 'filetype']
+      \     ['fileformat', 'fileencoding', 'filetype']
       \   ]
       \ },
       \ 'component_function': {
-      \   'charcode'     : 'MyCharCode',
       \   'fileencoding' : 'MyFileencoding',
       \   'fileformat'   : 'MyFileformat',
       \   'filename'     : 'MyFilename',
@@ -217,7 +223,10 @@ let g:lightline = {
       \   'modified'     : 'MyModified',
       \   'readonly'     : 'MyReadonly',
       \   'syntastic'    : 'SyntasticStatuslineFlag',
-      \ }
+      \   'fugitive'     : 'MyFugitive'
+      \ },
+      \ 'separator': { 'left': '⮀', 'right': '⮂' },
+      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
       \ }
 
 function! MyModified()
@@ -253,41 +262,26 @@ function! MyMode()
   return winwidth('.') > 60 ? lightline#mode() : ''
 endfunction
 
-function! MyCharCode()
-  if winwidth('.') <= 70
-    return ''
+function! MyFugitive()
+  if exists("*fugitive#head")
+    let _ = fugitive#head()
+    return strlen(_) ? '⭠ '._ : ''
   endif
-
-  " Get the output of :ascii
-  redir => ascii
-  silent! ascii
-  redir END
-
-  if match(ascii, 'NUL') != -1
-    return 'NUL'
-  endif
-
-  " Zero pad hex values
-  let nrformat = '0x%02x'
-
-  let encoding = (&fenc == '' ? &enc : &fenc)
-
-  if encoding == 'utf-8'
-    " Zero pad with 4 zeroes in unicode files
-    let nrformat = '0x%04x'
-  endif
-
-  " Get the character and the numeric value from the return value of :ascii
-  " This matches the two first pieces of the return value, e.g.
-  " "<F>  70" => char: 'F', nr: '70'
-  let [str, char, nr; rest] = matchlist(ascii, '\v\<(.{-1,})\>\s*([0-9]+)')
-
-  " Format the numeric value
-  let nr = printf(nrformat, nr)
-
-  return "'". char ."' ". nr
+  return ''
 endfunction
 "}}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntastic
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"mark syntax errors with :signs
+let g:syntastic_enable_signs=1
+"automatically jump to the error when saving the file
+let g:syntastic_auto_jump=0
+"show the error list automatically
+let g:syntastic_auto_loc_list=1
+"don't care about warnings
+let g:syntastic_quiet_messages = {'level': 'warnings'}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NeoComplete
@@ -379,4 +373,5 @@ nnoremap <Leader>b :Unite -auto-resize -buffer-name=buffers buffer<CR>
 nnoremap <Leader>T :Unite -start-insert -auto-resize -buffer-name=outline outline<CR>
 nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<CR>
 nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<CR>
+nnoremap <Leader>h :Unite -auto-resize -buffer-name=commands history/command<CR>
 nnoremap <Leader>r :Unite -start-insert -buffer-name=recent file_mru<CR>
