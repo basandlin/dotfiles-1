@@ -350,7 +350,9 @@ endif
 " Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:unite_split_rule = "botright"
+let g:unite_force_overwrite_statusline = 0
 let g:unite_source_history_yank_enable = 1
+let g:unite_winheight = 10
 
 " use fuzzy matcher in unite
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -386,7 +388,7 @@ endfunction
 autocmd FileType unite call s:unite_settings()
 
 nnoremap <Leader>t :Unite -start-insert -auto-resize -buffer-name=files buffer file_rec/async<CR>
-nnoremap <Leader>b :Unite -auto-resize -buffer-name=buffers buffer<CR>
+nnoremap <Leader>b :Unite -quick-match -auto-resize -buffer-name=buffers buffer<CR>
 nnoremap <Leader>T :Unite -start-insert -auto-resize -buffer-name=outline outline<CR>
 nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<CR>
 nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<CR>
