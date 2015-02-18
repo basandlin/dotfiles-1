@@ -9,11 +9,11 @@ Plug 'Shougo/unite-outline'
 Plug 'thinca/vim-unite-history'
 Plug 'Shougo/neomru.vim'
 if has('lua') && (version >= 704 || version == 703 && has('patch885'))
-	Plug 'Shougo/neocomplete.vim'
-	let g:completionEngine = 'neocomplete'
+  Plug 'Shougo/neocomplete.vim'
+  let g:completionEngine = 'neocomplete'
 else
-	Plug 'Shougo/neocomplcache.vim'
-	let g:completionEngine = 'neocomplcache'
+  Plug 'Shougo/neocomplcache.vim'
+  let g:completionEngine = 'neocomplcache'
 endif
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
@@ -34,6 +34,7 @@ Plug 'vim-scripts/camelcasemotion'
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-scripts/ShowMarks'
+Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
@@ -52,26 +53,26 @@ highlight clear SignColumn
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-	set guioptions-=T
-	set guioptions-=e
-	set t_Co=256
-	set guitablabel=%M\ %t
-	set guifont=Inconsolata:h22
+  set guioptions-=T
+  set guioptions-=e
+  set t_Co=256
+  set guitablabel=%M\ %t
+  set guifont=Inconsolata:h22
 endif
 
 if version >= 703
-    if exists("&undodir")
-        set undodir=~/.vim/undo//
-    endif
-    set undofile
-    set undoreload=10000
+  if exists("&undodir")
+    set undodir=~/.vim/undo//
+  endif
+  set undofile
+  set undoreload=10000
 endif
 set undolevels=10000
 if exists("&backupdir")
-    set backupdir=~/.vim/backups//
+  set backupdir=~/.vim/backups//
 endif
 if exists("&directory")
-    set directory=~/.vim/swaps//
+  set directory=~/.vim/swaps//
 endif
 
 let mapleader = ","
@@ -187,7 +188,7 @@ let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree (and tabs)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let NERDTreeMinimalUI=1
+let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let g:NERDTreeWinSize = 30
 " Auto open nerd tree on startup
@@ -195,6 +196,13 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 " Focus in the main content window
 let g:nerdtree_tabs_focus_on_files = 1
 nnoremap <D-N> :NERDTreeTabsToggle<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-indent-guides
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " light line
