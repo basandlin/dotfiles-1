@@ -350,7 +350,13 @@ endif
 " Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " use fuzzy matcher in unite
-call unite#custom#source('file,file/new,buffer,file_rec/async', 'matchers', 'matcher_fuzzy')
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+
+call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+      \ 'ignore_pattern', join([
+      \ '\.git/',
+      \ ], '\|'))
 
 if executable('ag')
 	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
