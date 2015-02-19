@@ -1,6 +1,7 @@
 " ==================================================
 " plugins
 " ==================================================
+" bundles {{{
 call plug#begin('~/.vim/bundle')
 Plug 'tpope/vim-sensible'
 Plug 'shougo/vimproc', {'do': 'make'}
@@ -45,6 +46,7 @@ Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
 call plug#end()
+" }}}
 
 colorscheme solarized
 set background=dark
@@ -111,6 +113,7 @@ set list listchars=tab:\ \ ,trail:·
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" indentation {{{
 " Use spaces instead of tabs
 set expandtab
 " Be smart when using tabs ;)
@@ -119,15 +122,17 @@ set smarttab
 set shiftwidth=2
 set tabstop=2
 " Linebreak on 500 characters
-set lbr
-set tw=500
-set ai "Auto indent
-set si "Smart indent
+set linebreak
+set textwidth=500
+set autoindent
+set smartindent
 set nowrap "Wrap lines
+" }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " key mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" key mappings {{{
 
 " make Y behave like C and D
 nnoremap Y y$
@@ -155,13 +160,28 @@ sunmap W
 sunmap B
 sunmap E
 
+" Source current file Cmd-% (good for vim development)
+map <D-%> :source %<CR>
+
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
 
+" }}}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" augroup stuff
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" augroup {{{
+augroup filetype_vim
+  autocmd!
+  autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " whitespace killer
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" whitespace killer {{{
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
 function! <SID>StripTrailingWhitespaces()
@@ -179,15 +199,18 @@ endfunction
 command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 nmap ,w :StripTrailingWhitespaces<CR>
 
+" }}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ShowMarks
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" showmarks {{{
 " Tell showmarks to not include the various brace marks (),{}, etc
 let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
-
+" }}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree (and tabs)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" nerdtree {{{
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let g:NERDTreeWinSize = 30
@@ -196,13 +219,16 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 " Focus in the main content window
 let g:nerdtree_tabs_focus_on_files = 1
 nnoremap <D-N> :NERDTreeTabsToggle<CR>
+" }}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-indent-guides
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-indent-guides {{{
 let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 let g:indent_guides_auto_colors = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
+" }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " light line
@@ -214,7 +240,7 @@ let g:lightline = {
       \ 'active': {
       \   'left': [
       \     ['mode', 'paste'],
-      \     ['fugitive', 'readonly', 'filename', 'modified']
+      \     ['fugitive', 'readonly', 'filename']
       \   ],
       \   'right': [
       \     ['lineinfo', 'syntastic'],
@@ -282,6 +308,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Syntastic
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" syntastic {{{
 "mark syntax errors with :signs
 let g:syntastic_enable_signs=1
 "automatically jump to the error when saving the file
@@ -290,10 +317,12 @@ let g:syntastic_auto_jump=0
 let g:syntastic_auto_loc_list=1
 "don't care about warnings
 let g:syntastic_quiet_messages = {'level': 'warnings'}
+" }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NeoComplete
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" neocomplete {{{
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_camel_case = 1
 let g:neocomplete#enable_smart_case = 1
@@ -324,10 +353,12 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+" }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NeoSnippet
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" neosnippet {{{
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -345,10 +376,12 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 if has('conceal')
   set conceallevel=2 concealcursor=i
 endif
+"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" unite {{{
 let g:unite_split_rule = "botright"
 let g:unite_force_overwrite_statusline = 0
 let g:unite_source_history_yank_enable = 1
@@ -396,5 +429,22 @@ nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<CR>
 nnoremap <Leader>h :Unite -auto-resize -buffer-name=commands history/command<CR>
 nnoremap <Leader>r :Unite -start-insert -buffer-name=recent file_mru<CR>
 
+function! GetVisual()
+  let reg_save = getreg('"')
+  let regtype_save = getregtype('"')
+  let cb_save = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', reg_save, regtype_save)
+  let &clipboard = cb_save
+  echom selection
+  return selection
+endfunction
+
 "grep the current word using K (mnemonic Kurrent)
-nnoremap K :execute "Unite -no-quit -buffer-name=search grep:.::" . expand('<cword>')<CR>
+nnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . expand('<cword>')<CR>
+
+"grep visual selection with K
+vnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . escape(GetVisual(), ' ')<CR>
+"}}}
