@@ -41,17 +41,15 @@ Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
 Plug 'Raimondi/delimitMate'
-Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
 call plug#end()
 " }}}
 
-colorscheme solarized
+colorscheme gruvbox
 set background=dark
-" fix vim-gitgutter display with solarized
-highlight clear SignColumn
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -235,7 +233,7 @@ let g:indent_guides_guide_size = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lightline: "{{{
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'jellybeans',
       \ 'mode_map': {'c': 'NORMAL'},
       \ 'active': {
       \   'left': [
