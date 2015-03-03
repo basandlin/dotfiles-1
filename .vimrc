@@ -39,7 +39,7 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
-Plug 'gregsexton/gitv'
+Plug 'gregsexton/gitv', {'on': 'Gitv'}
 Plug 'morhetz/gruvbox'
 Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
@@ -164,7 +164,7 @@ nnoremap N Nzz
 xnoremap < <gv
 xnoremap > >gv
 
-nmap <silent><leader>cp :CopyPath<CR>
+nnoremap <silent><leader>cp :CopyPath<CR>
 
 " upper case camel case motion
 map W <Plug>CamelCaseMotion_w
@@ -175,7 +175,7 @@ sunmap B
 sunmap E
 
 " Source current file Cmd-% (good for vim development)
-map <D-%> :source %<CR>
+noremap <D-%> :source %<CR>
 
 " }}}
 " 19 reading and writing files {{{
