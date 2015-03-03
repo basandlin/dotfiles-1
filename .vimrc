@@ -1,7 +1,5 @@
-" ==================================================
-" plugins
-" ==================================================
-" bundles {{{
+"  1 important {{{
+
 call plug#begin('~/.vim/bundle')
 Plug 'tpope/vim-sensible'
 Plug 'shougo/vimproc', {'do': 'make'}
@@ -33,6 +31,7 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tomtom/tcomment_vim'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'itchyny/lightline.vim'
+Plug 'Raimondi/delimitMate'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-scripts/ShowMarks'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -40,49 +39,15 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
 Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
-Plug 'Raimondi/delimitMate'
+Plug 'gregsexton/gitv'
 Plug 'morhetz/gruvbox'
 Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
 call plug#end()
+
 " }}}
-
-colorscheme gruvbox
-set background=dark
-
-" Set extra options when running in GUI mode
-if has("gui_running")
-  set guioptions-=T
-  set guioptions-=e
-  set t_Co=256
-  set guitablabel=%M\ %t
-  set guifont=Inconsolata:h22
-endif
-
-if version >= 703
-  if exists("&undodir")
-    set undodir=~/.vim/undo//
-  endif
-  set undofile
-  set undoreload=10000
-endif
-set undolevels=10000
-if exists("&backupdir")
-  set backupdir=~/.vim/backups//
-endif
-if exists("&directory")
-  set directory=~/.vim/swaps//
-endif
-
-let mapleader = ","
-let g:mapleader = ","
-
-" allow buffer switching without saving
-set hidden
-
-set number
-"if exists('+rnu') | set relativenumber | endif
+"  2 moving around, searching and patterns {{{
 
 " Ignore case when searching
 set ignorecase
@@ -99,19 +64,64 @@ set magic
 set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
+
+" }}}
+"  3 tags {{{
+" }}}
+"  4 displaying text {{{
+
+set number
+
+" Display tabs and trailing spaces visually
+set list listchars=tab:\ \ ,trail:·
+
+" }}}
+"  5 syntax, highlighting and spelling {{{
+" }}}
+"  6 multiple windows {{{
+
+" allow buffer switching without saving
+set hidden
+
+" }}}
+"  7 multiple tab pages {{{
+"  }}}
+"  8 terminal {{{
+"  }}}
+"  9 using the mouse {{{
+"  }}}
+" 10 GUI {{{
+
+colorscheme gruvbox
+set background=dark
+
+" Set extra options when running in GUI mode
+if has("gui_running")
+  set guioptions-=T
+  set guioptions-=e
+  set t_Co=256
+  set guitablabel=%M\ %t
+  set guifont=Inconsolata:h22
+endif
+
+" }}}
+" 11 printing {{{
+" }}}
+" 12 messages and info {{{
+
 " No annoying sound on errors
 set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
 
-" Display tabs and trailing spaces visually
-set list listchars=tab:\ \ ,trail:·
+" }}}
+" 13 selecting text {{{
+" }}}
+" 14 editing text {{{
+" }}}
+" 15 tabs and indenting {{{
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" indentation {{{
 " Use spaces instead of tabs
 set expandtab
 " Be smart when using tabs ;)
@@ -125,12 +135,16 @@ set textwidth=500
 set autoindent
 set smartindent
 set nowrap "Wrap lines
-" }}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" key mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" key mappings {{{
+" }}}
+" 16 folding {{{
+" }}}
+" 17 diff mode {{{
+" }}}
+" 18 mapping {{{
+
+let mapleader = ","
+let g:mapleader = ","
 
 " make Y behave like C and D
 nnoremap Y y$
@@ -150,6 +164,8 @@ nnoremap N Nzz
 xnoremap < <gv
 xnoremap > >gv
 
+nmap <silent><leader>cp :CopyPath<CR>
+
 " upper case camel case motion
 map W <Plug>CamelCaseMotion_w
 map B <Plug>CamelCaseMotion_b
@@ -161,20 +177,51 @@ sunmap E
 " Source current file Cmd-% (good for vim development)
 map <D-%> :source %<CR>
 
+" }}}
+" 19 reading and writing files {{{
+" }}}
+" 20 the swap file {{{
+
+if exists("&directory")
+  set directory=~/.vim/swaps//
+endif
+
+" }}}
+" 21 command line editing {{{
+
+if version >= 703
+  if exists("&undodir")
+    set undodir=~/.vim/undo//
+  endif
+  set undofile
+  set undoreload=10000
+endif
+set undolevels=10000
+if exists("&backupdir")
+  set backupdir=~/.vim/backups//
+endif
+
+" }}}
+" 22 executing external commands {{{
+
+" }}}
+" 23 running make and jumping to errors {{{
+" }}}
+" 24 language specific {{{
+
+" }}}
+" 25 multi-byte characters {{{
+" }}}
+" 26 various {{{
+
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
 
-" }}}
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" augroup stuff
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" augroup {{{
 augroup filetype_vim
   autocmd!
   autocmd FileType vim setlocal foldmethod=marker
 augroup END
-" }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " whitespace killer
@@ -419,12 +466,12 @@ function! s:unite_settings()
 endfunction
 autocmd FileType unite call s:unite_settings()
 
-nnoremap <Leader>t :Unite -start-insert -auto-resize -buffer-name=files buffer file_rec/async<CR>
-nnoremap <Leader>b :Unite -start-insert -auto-resize -buffer-name=buffers buffer<CR>
-nnoremap <Leader>T :Unite -start-insert -auto-resize -buffer-name=outline outline<CR>
+nnoremap <Leader>t :Unite -start-insert -buffer-name=files buffer file_rec/async<CR>
+nnoremap <Leader>b :Unite -start-insert -buffer-name=buffers buffer<CR>
+nnoremap <Leader>T :Unite -start-insert -buffer-name=outline outline<CR>
 nnoremap <Leader>g :Unite -no-quit -buffer-name=search grep:.<CR>
 nnoremap <Leader>y :Unite -buffer-name=yanks history/yank<CR>
-nnoremap <Leader>h :Unite -auto-resize -buffer-name=commands history/command<CR>
+nnoremap <Leader>h :Unite -buffer-name=commands history/command<CR>
 nnoremap <Leader>r :Unite -start-insert -buffer-name=recent file_mru<CR>
 
 function! GetVisual()
@@ -436,7 +483,6 @@ function! GetVisual()
   let selection = getreg('"')
   call setreg('"', reg_save, regtype_save)
   let &clipboard = cb_save
-  echom selection
   return selection
 endfunction
 
@@ -445,4 +491,5 @@ nnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . expand(
 
 "grep visual selection with K
 vnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . escape(GetVisual(), ' ')<CR>
-"}}}
+" }}}
+" }}}
