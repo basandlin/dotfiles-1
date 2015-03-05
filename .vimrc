@@ -174,8 +174,8 @@ sunmap W
 sunmap B
 sunmap E
 
-" Source current file Cmd-% (good for vim development)
-noremap <D-%> :source %<CR>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " }}}
 " 19 reading and writing files {{{
