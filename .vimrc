@@ -38,10 +38,12 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'wellle/targets.vim'
 Plug 'sjl/gundo.vim', {'on': 'GundoToggle'}
 Plug 'gregsexton/gitv', {'on': 'Gitv'}
 Plug 'morhetz/gruvbox'
 Plug 'bogado/file-line'
+Plug 'chrisbra/vim-diff-enhanced'
 Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
 call plug#end()
@@ -177,13 +179,22 @@ sunmap E
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+nnoremap <silent> <leader>cl :lclose<CR>
+nnoremap <silent> <leader>ol :lopen<CR>
+
+nnoremap <silent> <Left> :bprevious<CR>
+inoremap <silent> <Left> :bprevious<CR>
+
+nnoremap <silent> <Right> :bnext<CR>
+inoremap <silent> <Right> :bnext<CR>
+
 " }}}
 " 19 reading and writing files {{{
 " }}}
 " 20 the swap file {{{
 
 if exists("&directory")
-  set directory=~/.vim/swaps//
+  set directory=~/.vim/swaps/
 endif
 
 " }}}
@@ -191,14 +202,14 @@ endif
 
 if version >= 703
   if exists("&undodir")
-    set undodir=~/.vim/undo//
+    set undodir=~/.vim/undo/
   endif
   set undofile
   set undoreload=10000
 endif
 set undolevels=10000
 if exists("&backupdir")
-  set backupdir=~/.vim/backups//
+  set backupdir=~/.vim/backups/
 endif
 
 " }}}
@@ -360,8 +371,15 @@ let g:syntastic_enable_signs=1
 let g:syntastic_auto_jump=0
 "show the error list automatically
 let g:syntastic_auto_loc_list=1
-"don't care about warnings
-let g:syntastic_quiet_messages = {'level': 'warnings'}
+" show multiple checkers at once
+let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+let g:syntastic_javascript_checkers = ['jshint', 'jscs']
+
 " }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
