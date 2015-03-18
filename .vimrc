@@ -34,7 +34,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-scripts/ShowMarks'
-Plug 'nathanaelkane/vim-indent-guides'
+Plug 'Yggdroot/indentLine'
 Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/copypath.vim'
 Plug 'nelstrom/vim-visual-star-search'
@@ -176,8 +176,8 @@ sunmap W
 sunmap B
 sunmap E
 
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <silent> <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <silent> <leader>sv :source $MYVIMRC<cr>
 
 nnoremap <silent> <leader>cl :lclose<CR>
 nnoremap <silent> <leader>ol :lopen<CR>
@@ -194,6 +194,10 @@ inoremap <silent> <Right> :bnext<CR>
 " 20 the swap file {{{
 
 if exists("&directory")
+  " ensure swaps directory exists
+  if !isdirectory("~/.vim/swaps")
+    call system("mkdir ~/.vim/swaps")
+  endif
   set directory=~/.vim/swaps/
 endif
 
@@ -202,6 +206,10 @@ endif
 
 if version >= 703
   if exists("&undodir")
+    " ensure undo directory exists
+    if !isdirectory("~/.vim/undo")
+      call system("mkdir ~/.vim/undo")
+    endif
     set undodir=~/.vim/undo/
   endif
   set undofile
@@ -209,6 +217,10 @@ if version >= 703
 endif
 set undolevels=10000
 if exists("&backupdir")
+  " ensure backup directory exists
+  if !isdirectory("~/.vim/backups")
+    call system("mkdir ~/.vim/backups")
+  endif
   set backupdir=~/.vim/backups/
 endif
 
@@ -233,6 +245,14 @@ augroup filetype_vim
   autocmd!
   autocmd FileType vim setlocal foldmethod=marker
 augroup END
+
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
+
+"}}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " whitespace killer
@@ -277,13 +297,11 @@ let g:nerdtree_tabs_focus_on_files = 1
 nnoremap <D-N> :NERDTreeTabsToggle<CR>
 " }}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-indent-guides
+" indentLine
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-indent-guides {{{
-let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
-let g:indent_guides_auto_colors = 1
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
+" indentLine {{{
+let g:indentLine_char = '¦'
+nnoremap <Leader>ig :IndentLinesToggle<CR>
 " }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -370,7 +388,7 @@ let g:syntastic_enable_signs=1
 "automatically jump to the error when saving the file
 let g:syntastic_auto_jump=0
 "show the error list automatically
-let g:syntastic_auto_loc_list=1
+let g:syntastic_auto_loc_list=0
 " show multiple checkers at once
 let g:syntastic_aggregate_errors = 1
 
