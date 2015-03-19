@@ -25,6 +25,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-rails'
 Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
@@ -253,10 +254,6 @@ autocmd BufReadPost *
       \ endif
 
 "}}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" whitespace killer
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " whitespace killer {{{
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
@@ -276,16 +273,10 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 nmap ,w :StripTrailingWhitespaces<CR>
 
 " }}}
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ShowMarks
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " showmarks {{{
 " Tell showmarks to not include the various brace marks (),{}, etc
 let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
 " }}}
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTree (and tabs)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nerdtree {{{
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
@@ -296,17 +287,10 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:nerdtree_tabs_focus_on_files = 1
 nnoremap <D-N> :NERDTreeTabsToggle<CR>
 " }}}
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" indentLine
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " indentLine {{{
 let g:indentLine_char = '¦'
 nnoremap <Leader>ig :IndentLinesToggle<CR>
 " }}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" light line
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lightline: "{{{
 let g:lightline = {
       \ 'colorscheme': 'jellybeans',
@@ -378,10 +362,6 @@ function! MyFugitive()
   return ''
 endfunction
 "}}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntastic
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " syntastic {{{
 "mark syntax errors with :signs
 let g:syntastic_enable_signs=1
@@ -399,10 +379,6 @@ let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 
 " }}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NeoComplete
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " neocomplete {{{
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_camel_case = 1
@@ -435,10 +411,6 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 " }}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NeoSnippet
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " neosnippet {{{
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -458,10 +430,6 @@ if has('conceal')
   set conceallevel=2 concealcursor=i
 endif
 "}}}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Unite
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " unite {{{
 let g:unite_split_rule = "botright"
 let g:unite_force_overwrite_statusline = 0
@@ -527,5 +495,4 @@ nnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . expand(
 
 "grep visual selection with K
 vnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . escape(GetVisual(), ' ')<CR>
-" }}}
 " }}}
