@@ -98,6 +98,7 @@ set hidden
 
 colorscheme gruvbox
 set background=dark
+let g:gruvbox_contrast_dark="soft"
 
 " Set extra options when running in GUI mode
 if has("gui_running")
