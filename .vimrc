@@ -98,7 +98,7 @@ set hidden
 
 colorscheme gruvbox
 set background=dark
-let g:gruvbox_contrast_dark="soft"
+let g:gruvbox_contrast_dark="hard"
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -106,7 +106,7 @@ if has("gui_running")
   set guioptions-=e
   set t_Co=256
   set guitablabel=%M\ %t
-  set guifont=Inconsolata:h22
+  set guifont=Inconsolata:h18
 endif
 
 " }}}
@@ -493,10 +493,10 @@ function! GetVisual()
 endfunction
 
 "grep the current word using K (mnemonic Kurrent)
-nnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . expand('<cword>')<CR>
+nnoremap <silent> K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . expand('<cword>')<CR>
 
 "grep visual selection with K
-vnoremap K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . escape(GetVisual(), ' ')<CR>
+vnoremap <silent> K :<C-U>execute "Unite -no-quit -buffer-name=search grep:.::" . escape(GetVisual(), ' ')<CR>
 " }}}
 " ranger {{{
 
