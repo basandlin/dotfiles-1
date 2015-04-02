@@ -96,9 +96,9 @@ set hidden
 "  }}}
 " 10 GUI {{{
 
-colorscheme gruvbox
 set background=dark
 let g:gruvbox_contrast_dark="hard"
+colorscheme gruvbox
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -191,6 +191,8 @@ inoremap <silent> <Left> :bprevious<CR>
 nnoremap <silent> <Right> :bnext<CR>
 inoremap <silent> <Right> :bnext<CR>
 
+nnoremap <silent> <leader>m :nohlsearch<CR>
+
 " }}}
 " 19 reading and writing files {{{
 " }}}
@@ -254,6 +256,15 @@ autocmd BufReadPost *
       \ if line("'\"") > 0 && line("'\"") <= line("$") |
       \   exe "normal! g`\"" |
       \ endif
+
+" Fix Cursor in TMUX
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
 
 "}}}
 " whitespace killer {{{
