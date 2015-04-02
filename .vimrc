@@ -29,7 +29,6 @@ Plug 'tpope/vim-rails'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/syntastic'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tomtom/tcomment_vim'
@@ -190,8 +189,6 @@ inoremap <silent> <Left> :bprevious<CR>
 
 nnoremap <silent> <Right> :bnext<CR>
 inoremap <silent> <Right> :bnext<CR>
-
-nnoremap <silent> <leader>m :nohlsearch<CR>
 
 " }}}
 " 19 reading and writing files {{{
