@@ -105,7 +105,7 @@ if has("gui_running")
   set guioptions-=e
   set t_Co=256
   set guitablabel=%M\ %t
-  set guifont=Inconsolata:h18
+  set guifont=Inconsolata\ for\ Powerline:h18
 endif
 
 " }}}
@@ -327,8 +327,8 @@ let g:lightline = {
       \   'syntastic'    : 'SyntasticStatuslineFlag',
       \   'fugitive'     : 'MyFugitive'
       \ },
-      \ 'separator': { 'left': '⮀', 'right': '⮂' },
-      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' }
       \ }
 
 function! MyModified()
@@ -336,7 +336,7 @@ function! MyModified()
 endfunction
 
 function! MyReadonly()
-  return &ft !~? 'help\|vimfiler\|gundo' && &ro ? '⭤' : ''
+  return &ft !~? 'help\|vimfiler\|gundo' && &ro ? '' : ''
 endfunction
 
 function! MyFilename()
@@ -367,7 +367,7 @@ endfunction
 function! MyFugitive()
   if exists("*fugitive#head")
     let _ = fugitive#head()
-    return strlen(_) ? '⭠ '._ : ''
+    return strlen(_) ? ' '._ : ''
   endif
   return ''
 endfunction
