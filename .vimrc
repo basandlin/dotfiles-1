@@ -30,7 +30,6 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'scrooloose/syntastic'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tomtom/tcomment_vim'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'itchyny/lightline.vim'
@@ -92,6 +91,9 @@ set hidden
 "  8 terminal {{{
 "  }}}
 "  9 using the mouse {{{
+
+set mouse=a
+
 "  }}}
 " 10 GUI {{{
 
@@ -301,7 +303,7 @@ nnoremap <D-N> :NERDTreeTabsToggle<CR>
 " }}}
 " indentLine {{{
 let g:indentLine_char = '¦'
-nnoremap <Leader>ig :IndentLinesToggle<CR>
+nnoremap <silent> <Leader>ig :IndentLinesToggle<CR>
 " }}}
 " lightline: "{{{
 let g:lightline = {
@@ -388,6 +390,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 
 " }}}
@@ -458,6 +461,7 @@ call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
       \ '\.bundler/',
       \ '\.cache/',
       \ '\.vendor/',
+      \ '\.log',
       \ ], '\|'))
 
 if executable('ag')
