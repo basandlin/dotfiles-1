@@ -238,6 +238,8 @@ endif
 " 25 multi-byte characters {{{
 " }}}
 " 26 various {{{
+"
+set clipboard=unnamed
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
