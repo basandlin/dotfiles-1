@@ -128,3 +128,8 @@
 [user]
 	username = Taybin Rutkin
 	name = Taybin Rutkin
+	email = trutkin@novetta.com
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true

@@ -25,7 +25,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-rails'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -46,6 +45,9 @@ Plug 'morhetz/gruvbox'
 Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
+Plug 'fatih/vim-go'
+Plug 'mattn/webapi-vim'
+Plug 'cirla/vim-giphy'
 call plug#end()
 
 " }}}
