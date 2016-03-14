@@ -67,6 +67,7 @@ function ggc {
 
 export CDPATH=.:/home/vagrant/go/src/github.com/Novetta:~
 
+export GOPATH="/home/vagrant/go"
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:/vagrant/bin:/usr/local/go/bin:/home/vagrant/go/bin:/home/vagrant/.local/bin:/home/vagrant/bin"
 export MANPATH="/usr/local/man:$MANPATH"
 
