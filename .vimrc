@@ -25,7 +25,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'scrooloose/syntastic'
@@ -46,8 +45,7 @@ Plug 'bogado/file-line'
 Plug 'sheerun/vim-polyglot'
 Plug 'rizzatti/dash.vim'
 Plug 'fatih/vim-go'
-Plug 'mattn/webapi-vim'
-Plug 'cirla/vim-giphy'
+Plug 'tmhedberg/SimpylFold'
 call plug#end()
 
 " }}}
@@ -306,6 +304,11 @@ nnoremap <D-N> :NERDTreeTabsToggle<CR>
 " indentLine {{{
 let g:indentLine_char = '¦'
 nnoremap <silent> <Leader>ig :IndentLinesToggle<CR>
+" https://github.com/elzr/vim-json/issues/23#issuecomment-40293049
+" disable json quote concealing when editing json
+let g:indentLine_noConcealCursor=""
+autocmd InsertEnter *.json setlocal conceallevel=2 concealcursor=
+autocmd InsertLeave *.json setlocal conceallevel=2 concealcursor=inc
 " }}}
 " lightline: "{{{
 let g:lightline = {
