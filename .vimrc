@@ -398,6 +398,8 @@ let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 
 let g:syntastic_javascript_checkers = ['jshint', 'jscs']
 
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+
 " }}}
 " neocomplete {{{
 let g:neocomplete#enable_at_startup = 1
