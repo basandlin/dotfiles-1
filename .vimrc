@@ -469,6 +469,7 @@ call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
       \ '\.cache/',
       \ '\.vendor/',
       \ '\.log',
+      \ '\.vagrant',
       \ ], '\|'))
 
 if executable('ag')
