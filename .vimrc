@@ -24,10 +24,9 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-dispatch'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'scrooloose/syntastic'
+Plug 'vim-scripts/indentpython.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'vim-scripts/camelcasemotion'
 Plug 'itchyny/lightline.vim'
@@ -144,6 +143,7 @@ set nowrap "Wrap lines
 
 " }}}
 " 16 folding {{{
+set nofoldenable    " disable folding
 " }}}
 " 17 diff mode {{{
 " }}}
@@ -252,11 +252,14 @@ augroup filetype_vim
   autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
-" Return to last edit position when opening files (You want this!)
-autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal! g`\"" |
-      \ endif
+augroup filetype_all
+  autocmd!
+  " Return to last edit position when opening files (You want this!)
+  autocmd BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \   exe "normal! g`\"" |
+        \ endif
+augroup END
 
 " Fix Cursor in TMUX
 if exists('$TMUX')
@@ -266,6 +269,22 @@ else
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
+
+augroup filetype_python
+  autocmd!
+  " PEP-8 compliance for python files
+  autocmd FileType python
+      \ setlocal tabstop=4       |
+      \ setlocal softtabstop=4   |
+      \ setlocal shiftwidth=4    |
+      \ setlocal textwidth=79    |
+      \ setlocal expandtab       |
+      \ setlocal autoindent      |
+      \ setlocal fileformat=unix |
+      \ setlocal encoding=utf-8
+augroup END
+
+let python_highlight_all = 1
 
 "}}}
 " whitespace killer {{{
@@ -307,8 +326,11 @@ nnoremap <silent> <Leader>ig :IndentLinesToggle<CR>
 " https://github.com/elzr/vim-json/issues/23#issuecomment-40293049
 " disable json quote concealing when editing json
 let g:indentLine_noConcealCursor=""
-autocmd InsertEnter *.json setlocal conceallevel=2 concealcursor=
-autocmd InsertLeave *.json setlocal conceallevel=2 concealcursor=inc
+augroup filetype_json
+  autocmd!
+  autocmd InsertEnter *.json setlocal conceallevel=2 concealcursor=
+  autocmd InsertLeave *.json setlocal conceallevel=2 concealcursor=inc
+augroup END
 " }}}
 " lightline: "{{{
 let g:lightline = {
@@ -396,7 +418,7 @@ let g:syntastic_check_on_wq = 0
 
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 
-let g:syntastic_javascript_checkers = ['jshint', 'jscs']
+let g:syntastic_javascript_checkers = ['eslint']
 
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 
@@ -426,12 +448,15 @@ endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+augroup omni_completion
+  autocmd!
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+augroup END
 " }}}
 " neosnippet {{{
 " Plugin key-mappings.
@@ -492,7 +517,11 @@ function! s:unite_settings()
   nmap <buffer> <esc> <plug>(unite_exit)
   imap <buffer> <esc> <plug>(unite_exit)
 endfunction
-autocmd FileType unite call s:unite_settings()
+
+augroup unite_settings
+  autocmd!
+  autocmd FileType unite call s:unite_settings()
+augroup END
 
 nnoremap <Leader>t :Unite -start-insert -buffer-name=files buffer file_rec/async<CR>
 nnoremap <Leader>b :Unite -start-insert -buffer-name=buffers buffer<CR>
