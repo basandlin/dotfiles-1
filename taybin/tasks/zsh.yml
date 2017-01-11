@@ -1,0 +1,28 @@
+---
+- name: Set zsh
+  user:
+    name: vagrant
+    shell: /bin/zsh
+
+- name: Clone oh-my-zsh repo
+  become_user: vagrant
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: /home/vagrant/.oh-my-zsh
+    version: master
+    update: no
+
+- name: Set .zshrc file
+  become_user: vagrant
+  file:
+    state: link
+    src: /home/vagrant/.dotfiles/{{ item }}
+    dest: /home/vagrant/{{ item }}
+  with_items:
+    - .zshrc
+
+- name: Add HIGHBEAMS_SETTINGS to .zshrc
+  become_user: vagrant
+  lineinfile: dest=/home/vagrant/.zshrc
+              insertafter="EOF"
+              line='export HIGHBEAMS_SETTINGS=~/settings.py'

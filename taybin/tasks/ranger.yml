@@ -1,0 +1,18 @@
+---
+- name: create ranger source directory
+  file:
+    path: /home/vagrant/ranger-stable
+    state: directory
+
+- name: unarchive ranger
+  unarchive:
+    src: http://nongnu.org/ranger/ranger-stable.tar.gz
+    remote_src: yes
+    dest: /home/vagrant/ranger-stable
+    creates: /home/vagrant/ranger-stable/ranger-{{ranger_version}}
+
+- name: install ranger
+  command: make install
+  args:
+    chdir: /home/vagrant/ranger-stable/ranger-{{ranger_version}}
+    creates: /bin/ranger

@@ -1,0 +1,39 @@
+---
+- name: Install stuff
+  yum: name={{item}} state=latest
+  with_items:
+    - gcc
+    - libevent-devel
+    - ncurses-devel
+    - zsh
+    - ruby
+    - jq
+
+- name: Get dotfiles
+  become: vagrant
+  git:
+    repo: https://github.com/taybin/dotfiles.git
+    dest: /home/vagrant/.dotfiles
+    version: master
+    update: False
+
+- name: link dotfiles
+  become: vagrant
+  file: state=link src=/home/vagrant/.dotfiles/{{ item }}
+        dest=/home/vagrant/{{ item }}
+  with_items:
+    - bin
+    - .editrc
+    - .gitconfig
+    - .inputrc
+    - .rdebugrc
+    - .shellrc.load
+    - .subversion
+    - .tmux.conf
+    - .vimrc
+
+- include: tmux.yml
+- include: vim.yml
+- include: ranger.yml
+- include: zsh.yml
+- include: fasd.yml
